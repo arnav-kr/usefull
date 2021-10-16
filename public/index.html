@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="apple-touch-icon" href="favicon.png">
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+	<title>UseFull - Shorten your Useful links instantly!</title>
+</head>
+
+<body>
+  <style>
+    pre,p code{
+    border-radius:4px;
+    background-color:#2d2d2d;
+    color:#fafafa;
+    padding:.5rem;
+  }
+  body{
+    font-family:sans-serif;
+    font-size:1rem;
+    padding:8px;
+    margin:0;
+    background-color:mediumseagreen;
+    color:#fff;
+
+  }
+  </style>
+  <pre><code>POST https://usefull.repl.co
+{
+  "link" : AnyLink
+}</code></pre>
+<pre><code>POST https://usefull.repl.co/shorten
+{
+  "link" : AnyLink
+}</code></pre>
+Response Format:
+<pre><code>{
+  "link": ShortLinkHere
+}</code></pre>
+<pre><code>GET https://usefull.repl.co/shorten?link=[AnyLinkHere]</code></pre>
+<p>Note: Links Should include <code>https://</code> or <code>http://</code></p>
+</body>
+
+</html>
