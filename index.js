@@ -175,6 +175,7 @@ app.get("/shorten", (req, res) => {
     });
   }
   else {
+    link = encodeURI(link);
     try {
       fetch(`https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=${process.env.KEY}`, {
         headers: {
