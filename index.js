@@ -61,11 +61,11 @@ usefull.on('child_changed', snap => {
 
 app.post('/', (req, res) => {
   if (req.headers["content-type"] !== "application/json") {
-    return res.status(400).sendFile("public/400.html");
+    return res.status(400).sendFile(__dirname + "/public/400.html");
   }
-  var link = req.body.link;
+  var link = req.body.link || undefined;
   if (!link || !req.body || typeof (link) !== "string") {
-    return res.status(400).sendFile("public/400.html");
+    return res.status(400).sendFile(__dirname + "/public/400.html");
   }
   else {
     link = decodeURI(link);
@@ -73,24 +73,40 @@ app.post('/', (req, res) => {
   }
 });
 
-app.post('/shorten', (req, res) => {
-  if (req.headers["content-type"] !== "application/json") {
-    return res.status(400).sendFile("public/400.html");
-  }
-  var link = req.body.link;
-  if (!link || !req.body || typeof (link) !== "string") {
-    return res.status(400).sendFile("public/400.html");
-  }
-  else {
-    link = decodeURI(link);
-    shorten(link, res);
-  }
-});
-
-app.get("/shorten", (req, res) => {
-  var link = req.query.link;
+app.get("/:link", (req, res) => {
+  var link = req.params.link || undefined;
   if (!link || !req.query || typeof (link) !== "string") {
-    return res.status(400).sendFile("public/400.html");
+    return res.status(400).sendFile(__dirname + "/public/400.html");
+  }
+  else {
+    link = decodeURI(link);
+    if (aliases[link]) {
+      res.redirect(aliases[link]);
+    }
+    else {
+      res.status(404).sendFile(__dirname + "/public/404.html");
+    }
+  }
+});
+
+app.post('/api/shorten', (req, res) => {
+  if (req.headers["content-type"] !== "application/json") {
+    return res.status(400).sendFile(__dirname + "/public/400.html");
+  }
+  var link = req.body.link || undefined;
+  if (!link || !req.body || typeof (link) !== "string") {
+    return res.status(400).sendFile(__dirname + "/public/400.html");
+  }
+  else {
+    link = decodeURI(link);
+    shorten(link, res);
+  }
+});
+
+app.get("/api/shorten", (req, res) => {
+  var link = req.query.link || undefined;
+  if (!link || !req.query || typeof (link) !== "string") {
+    return res.status(400).sendFile(__dirname + "/public/400.html");
   }
   else {
     link = decodeURI(link);
@@ -123,7 +139,7 @@ function shorten(link, res, isGET) {
       .catch((e) => {
         console.log(e);
         if (isGET) {
-          return res.status(400).sendFile("public/400.html");
+          return res.status(400).sendFile(__dirname + "/public/400.html");
         }
         else {
           return res.status(400).json({
@@ -136,7 +152,7 @@ function shorten(link, res, isGET) {
         console.log(json);
         if (json.error) {
           if (isGET) {
-            return res.status(400).sendFile("public/400.html");
+            return res.status(400).sendFile(__dirname + "/public/400.html");
           }
           else {
             return res.status(400).json({
@@ -146,13 +162,14 @@ function shorten(link, res, isGET) {
           }
         }
         if (json.shortLink) {
+          root.ref('usefull/' + json.shortLink).set(link);
           return res.status(200).json({
             link: json.shortLink,
             code: 200
           });
         }
         if (isGET) {
-          return res.status(400).sendFile("public/400.html");
+          return res.status(400).sendFile(__dirname + "/public/400.html");
         }
         else {
           return res.status(400).json({
@@ -164,7 +181,7 @@ function shorten(link, res, isGET) {
   }
   catch (err) {
     if (isGET) {
-      return res.status(400).sendFile("public/400.html");
+      return res.status(400).sendFile(__dirname + "/public/400.html");
     }
     else {
       return res.status(400).json({

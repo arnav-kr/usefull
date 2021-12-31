@@ -1,6 +1,21 @@
 {
   "hosting": [
     {
+      "target": "arnav-kumar",
+      "public": "public",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    },
+    {
       "target": "usefull",
       "public": "public",
       "ignore": [
