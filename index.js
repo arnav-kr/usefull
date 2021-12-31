@@ -118,6 +118,7 @@ app.listen(3000, () => {
   console.log('UseFull ready to be Useful!');
 });
 
+
 function shorten(link, res, isGET) {
   try {
     fetch(process.env.ENDPOINT, {
