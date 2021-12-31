@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "arnav-kumar"
+  },
+  "targets": {
+    "arnav-kumar": {
+      "hosting": {
+        "usefull": [
+          "usefull"
+        ]
+      }
+    }
+  }
+}

@@ -1,18 +1,20 @@
 const fetch = require("node-fetch");
 const express = require('express');
+require('dotenv').config();
 const rateLimit = require('express-rate-limit');
 const app = express();
 const bodyParser = require('body-parser');
+var admin = require("firebase-admin");
 const apiRequestLimiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minute
   max: 2, // limit each IP to 2 requests per windowMs
-  handler: function(req, res, /*next*/) {
+  handler: function (req, res, /*next*/) {
     return res.status(429).json({
       error: 'You have been Rate Limited! Please try after sometime!',
       code: 429
     })
   }
-})
+});
 app.use((req, res, next) => {
   res.append('Access-Control-Allow-Origin', ['*']);
   res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -28,208 +30,147 @@ app.use(
   })
 );
 
-app.get('/', (req, res) => {
-  res.send('Hello Express app!')
+const serviceAccount = JSON.parse(process.env.ADMIN_JSON);
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: process.env.DATABASE_URL,
+  databaseAuthVariableOverride: {
+    uid: process.env.SECRET_DATABASE_UID
+  }
+});
+
+const root = admin.database();
+const usefull = root.ref('usefull');
+
+var aliases = {};
+
+usefull.on('child_added', snap => {
+  var link = snap.val();
+  aliases[snap.key] = link;
+  console.log("New Alias Added");
+});
+usefull.on('child_removed', snap => {
+  delete aliases[snap.key];
+  console.log("New Alias Deleted");
+});
+usefull.on('child_changed', snap => {
+  var link = snap.val();
+  aliases[snap.key] = link;
+  console.log("New Alias Changed!");
 });
 
 app.post('/', (req, res) => {
-  if(req.headers["content-type"] !== "application/json"){
-    return res.status(400).json({
-      error: "Not A valid Request! Content-Type should be 'application/json'",
-      code: 400
-    });
+  if (req.headers["content-type"] !== "application/json") {
+    return res.status(400).sendFile("public/400.html");
   }
   var link = req.body.link;
-  if (!link || !req.body || typeof(link) !== "string") {
-    return res.status(400).json({
-      error: "Not A valid Request!",
-      code: 400
-    });
+  if (!link || !req.body || typeof (link) !== "string") {
+    return res.status(400).sendFile("public/400.html");
   }
   else {
-    link = encodeURI(link);
-    try {
-      fetch(`https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=${process.env.KEY}`, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          "suffix": {
-             "option": "SHORT"
-          },
-          "dynamicLinkInfo": {
-             "domainUriPrefix": "https://usefull.page.link",
-             "link": link,
-           }
-        }),
-      })
-        .then(res => res.json())
-        .catch((e) => {
-          return res.status(400).json({
-            error: "An Error Occured while shortening the link!",
-            code: 400
-          });
-        })
-        .then(json =>{
-          if(json.error){
-            return res.status(400).json({
-            error: "An Error Occured while shortening the link!",
-              code: 400
-          });
-          }
-          if(json.shortLink){
-            return res.status(200).json({
-            link: json.shortLink,
-            code: 200
-            });
-          }
-          return res.status(400).json({
-            error: "An Error Occured while shortening the link!",
-            code: 400
-          });
-           console.log(json);
-        });
-    }
-    catch (err) {
-      return res.status(400).json({
-        error: "An Error Occured while shortening the link!",
-        code: 400
-      });
-    }
+    link = decodeURI(link);
+    shorten(link, res);
   }
 });
 
 app.post('/shorten', (req, res) => {
-  if(req.headers["content-type"] !== "application/json"){
-    return res.status(400).json({
-      error: "Not A valid Request! Content-Type should be 'application/json'",
-      code: 400
-    });
+  if (req.headers["content-type"] !== "application/json") {
+    return res.status(400).sendFile("public/400.html");
   }
   var link = req.body.link;
-  if (!link || !req.body || typeof(link) !== "string") {
-    return res.status(400).json({
-      error: "Not A valid Request!",
-      code: 400
-    });
+  if (!link || !req.body || typeof (link) !== "string") {
+    return res.status(400).sendFile("public/400.html");
   }
   else {
-    link = encodeURI(link);
-    try {
-      fetch(`https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=${process.env.KEY}`, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          "suffix": {
-             "option": "SHORT"
-          },
-          "dynamicLinkInfo": {
-             "domainUriPrefix": "https://usefull.page.link",
-             "link": link,
-           }
-        }),
-      })
-        .then(res => res.json())
-        .catch((e) => {
-          return res.status(400).json({
-            error: "An Error Occured while shortening the link!",
-            code: 400
-          });
-        })
-        .then(json =>{
-          if(json.error){
-            return res.status(400).json({
-            error: "An Error Occured while shortening the link!",
-              code: 400
-          });
-          }
-          if(json.shortLink){
-            return res.status(200).json({
-              link: json.shortLink,
-              code: 200
-          });
-          }
-          return res.status(400).json({
-            error: "An Error Occured while shortening the link!",
-            code: 400
-          });
-           console.log(json);
-        });
-    }
-    catch (err) {
-      return res.status(400).json({
-        error: "An Error Occured while shortening the link!",
-        code: 400
-      });
-    }
+    link = decodeURI(link);
+    shorten(link, res);
   }
 });
 
 app.get("/shorten", (req, res) => {
   var link = req.query.link;
-  if (!link || !req.query || typeof(link) !== "string") {
-    return res.status(400).json({
-      error: "Not A valid Request!",
-      code: 400
-    });
+  if (!link || !req.query || typeof (link) !== "string") {
+    return res.status(400).sendFile("public/400.html");
   }
   else {
-    link = encodeURI(link);
-    try {
-      fetch(`https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=${process.env.KEY}`, {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify({
-          "suffix": {
-             "option": "SHORT"
-          },
-          "dynamicLinkInfo": {
-             "domainUriPrefix": "https://usefull.page.link",
-             "link": link,
-           }
-        }),
-      })
-        .then(res => res.json())
-        .catch((e) => {
-          return res.status(400).json({
-            error: "An Error Occured while shortening the link!",
-            code: 400
-          });
-        })
-        .then(json =>{
-          if(json.error){
-            return res.status(400).json({
-            error: "An Error Occured while shortening the link!",
-              code: 400
-          });
-          }
-          if(json.shortLink){
-            return res.status(200).json({
-              link: json.shortLink,
-              code: 200
-          });
-          }
-          return res.status(400).json({
-            error: "An Error Occured while shortening the link!",
-            code: 400
-          });
-           console.log(json);
-        });
-    }
-    catch (err) {
-      return res.status(400).json({
-        error: "An Error Occured while shortening the link!",
-        code: 400
-      });
-    }
+    link = decodeURI(link);
+    shorten(link, res, true);
   }
 });
 
 app.listen(3000, () => {
   console.log('UseFull ready to be Useful!');
 });
+
+function shorten(link, res, isGET) {
+  try {
+    fetch(process.env.ENDPOINT, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        "suffix": {
+          "option": "SHORT"
+        },
+        "dynamicLinkInfo": {
+          "domainUriPrefix": process.env.URL_PREFIX,
+          "link": link,
+        }
+      }),
+    })
+      .then(response => response.json())
+      .catch((e) => {
+        console.log(e);
+        if (isGET) {
+          return res.status(400).sendFile("public/400.html");
+        }
+        else {
+          return res.status(400).json({
+            error: 'Bad Request!',
+            code: 400
+          });
+        }
+      })
+      .then(json => {
+        console.log(json);
+        if (json.error) {
+          if (isGET) {
+            return res.status(400).sendFile("public/400.html");
+          }
+          else {
+            return res.status(400).json({
+              error: 'Bad Request!',
+              code: 400
+            });
+          }
+        }
+        if (json.shortLink) {
+          return res.status(200).json({
+            link: json.shortLink,
+            code: 200
+          });
+        }
+        if (isGET) {
+          return res.status(400).sendFile("public/400.html");
+        }
+        else {
+          return res.status(400).json({
+            error: 'Bad Request!',
+            code: 400
+          });
+        }
+      });
+  }
+  catch (err) {
+    if (isGET) {
+      return res.status(400).sendFile("public/400.html");
+    }
+    else {
+      return res.status(400).json({
+        error: 'Bad Request!',
+        code: 400
+      });
+    }
+  }
+}
