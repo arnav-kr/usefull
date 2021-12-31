@@ -163,7 +163,8 @@ function shorten(link, res, isGET) {
           }
         }
         if (json.shortLink) {
-          root.ref('usefull/' + json.shortLink).set(link);
+          let slug = new URL(json.shortLink).pathname.split('/').pop();
+          root.ref('usefull/' + slug).set(link);
           return res.status(200).json({
             link: json.shortLink,
             code: 200
