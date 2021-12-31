@@ -1,0 +1,86 @@
+* {
+  box-sizing: border-box;
+}
+.bg-white {
+  background-color: white !important;
+}
+.cover-bg {
+  background-color: transparent !important;
+  position: fixed;
+  width: 100%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(100vh - 48px);
+  opacity: 0.5;
+}
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+body::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: url("https://st.depositphotos.com/2229436/2368/v/380/depositphotos_23688999-stock-illustration-seamless-pattern-white-background-retro.jpg?forcejpeg=true") !important;
+  filter: invert(83%) sepia(11%) saturate(984%) hue-rotate(177deg) brightness(98%) contrast(88%);
+}
+header {
+  width: 100vw;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.24);
+  background-color: rgba(255, 255, 255, 0.12);
+}
+.header-text {
+  line-height: 36px;
+}
+.link-container {
+  border-radius: 4px;
+}
+.br-4 {
+  border-radius: 4px !important;
+}
+#usefull-link-container {
+  position: relative;
+  cursor: pointer;
+}
+#usefull-link-container::after {
+  transition: 100ms ease-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  content: "";
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: #ffffff;
+}
+#usefull-link-container.text-copied::after {
+  content: "Successfully Copied!";
+  background-color: mediumseagreen;
+}
+#usefull-link-container.copy-error::after {
+  content: "Couldn't Copy!";
+  background-color: red;
+}
+
+main {
+  max-width: 700px;
+  width: 100%;
+  min-width: 200px;
+}

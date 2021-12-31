@@ -2,47 +2,95 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="apple-touch-icon" href="favicon.png">
-	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
-	<title>UseFull - Shorten your Useful links instantly!</title>
+  <title>UseFull - Shorten your Useful links instantly!</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link href="https://unpkg.com/spectre.css/dist/spectre.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/clipboard@2.0.8/dist/clipboard.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
 </head>
 
 <body>
-  <style>
-    pre,p code{
-    border-radius:4px;
-    background-color:#2d2d2d;
-    color:#fafafa;
-    padding:.5rem;
-  }
-  body{
-    font-family:sans-serif;
-    font-size:1rem;
-    padding:8px;
-    margin:0;
-    background-color:mediumseagreen;
-    color:#fff;
+  <header class="navbar p-2">
+    <section class="navbar-section">
+      <a href="/docs" class="btn btn-link text-light" style="text-decoration: underline;">API Docs</a>
+    </section>
+    <section class="navbar-center">
+      <a class="navbar-brand text-light text-bold mr-2" href="/">UseFull</a>
+    </section>
+    <section class="navbar-section">
+      <a href="https://github.com/arnav-kr/usefull/" class="btn btn-link text-light" style="text-decoration: underline;">GitHub</a>
+    </section>
+  </header>
+  <main>
+    <!-- <div class="cover-bg"></div> -->
+    <div class="hero hero-sm">
+      <div class="hero-body">
+        <p class="text-center text-light header-text h4">Shorten Your Useful Links Instantly!</p>
+      </div>
+    </div>
+    <article>
+      <section>
+        <form id="shorten" onsubmit="form(event)" title="Shorten your link" method="POST" enctype="application/json"
+          action="https://usefull.repl.co/shorten" data-fields="link" class="m-2 p-2">
+          <div class="input-group">
+            <input required class="form-input input-lg" type="url" id="link-box" name="link"
+              placeholder="Enter your link" title="Enter your link"
+              oninvalid="this.setCustomValidity('Please Enter a valid URL.')" oninput="this.setCustomValidity('')">
+            <button class="submit-btn btn btn-primary input-group-btn btn-lg c-pointer" title="Shorten" id="shorten-btn"
+              type="submit" aria-role="button">Shorten</button>
+          </div>
+        </form>
+      </section>
+      <section id="output-section" hidden>
+        <div class="container pt-2 mt-2">
+          <p class="text-light m-2 pb-2 text-center h5">Here's your Usefull short link!</p>
+          <div class="link-container m-2 p-2 bg-secondary" data-clipboard-text="YOUR_USEFULL_LINK"
+            id="usefull-link-container">
+            <p class="text-primary text-center m-2 h5 usefull-link" id="usefull-link">YOUR_USEFULL_LINK</p>
+          </div>
+        </div>
+      </section>
+    </article>
+    <aside>
+      <section title="Advertisents" class="pl-2 pr-2 pt-2" hidden>
+        <div class="ads bg-white m-2 p-2 br-4" style="min-height:170px;">
+        </div>
+      </section>
+    </aside>
+  </main>
+  <footer>
+  </footer>
+  <script>
+    if (window.location && window.location.href && window.location.href.hash) {
+      document.getElementById("link-box").value = window.location.href.hash;
+      document.getElementById("shorten").submit()
+    }
+    var usefull_link = new ClipboardJS(document.getElementById("usefull-link-container"));
+    usefull_link.on('success', function (e) {
+      if (e.action == "copy") {
+        document.getElementById("usefull-link-container").classList.add("text-copied");
+        setTimeout(() => {
+          document.getElementById("usefull-link-container").classList.remove("text-copied");
+        }, 1000);
+      }
+      e.clearSelection();
+    });
 
-  }
-  </style>
-  <pre><code>POST https://usefull.repl.co
-{
-  "link" : AnyLink
-}</code></pre>
-<pre><code>POST https://usefull.repl.co/shorten
-{
-  "link" : AnyLink
-}</code></pre>
-Response Format:
-<pre><code>{
-  "link": ShortLinkHere
-}</code></pre>
-<pre><code>GET https://usefull.repl.co/shorten?link=[AnyLinkHere]</code></pre>
-<p>Note: Links Should include <code>https://</code> or <code>http://</code></p>
+    usefull_link.on('error', function (e) {
+      if (e.action == "copy") {
+        document.getElementById("usefull-link-container").classList.add("copy-error");
+        setTimeout(() => {
+          document.getElementById("usefull-link-container").classList.remove("copy-error");
+        }, 1000);
+      }
+    });
+  </script>
 </body>
 
 </html>
