@@ -7,8 +7,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="apple-touch-icon" href="favicon.png">
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="./favicon.png">
+  <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
   <link href="https://unpkg.com/spectre.css/dist/spectre.min.css" rel="stylesheet">
   <script src="https://unpkg.com/clipboard@2.0.8/dist/clipboard.min.js"></script>
   <link rel="stylesheet" href="style.css">
@@ -24,7 +24,8 @@
       <a class="navbar-brand text-light text-bold mr-2" href="/">UseFull</a>
     </section>
     <section class="navbar-section">
-      <a href="https://github.com/arnav-kr/usefull/" class="btn btn-link text-light" style="text-decoration: underline;">GitHub</a>
+      <a href="https://github.com/arnav-kr/usefull/" class="btn btn-link text-light"
+        style="text-decoration: underline;">GitHub</a>
     </section>
   </header>
   <main>
@@ -37,7 +38,7 @@
     <article>
       <section>
         <form id="shorten" onsubmit="form(event)" title="Shorten your link" method="POST" enctype="application/json"
-          action="https://usefull.repl.co/shorten" data-fields="link" class="m-2 p-2">
+          action="https://usefull.vercel.app/shorten" data-fields="link" class="m-2 p-2">
           <div class="input-group">
             <input required class="form-input input-lg" type="url" id="link-box" name="link"
               placeholder="Enter your link" title="Enter your link"
