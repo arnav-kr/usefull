@@ -1,44 +1,75 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-<url>
-<loc>https://usefull.repl.co/</loc>
-<changefreq>hourly</changefreq>
-<priority>1.0</priority>
-<lastmod>2021-10-14</lastmod>
-<image:image>
-<image:loc>https://usefull.repl.co/logo.png</image:loc>
-<image:caption>Shorten your Useful links instantly!</image:caption>
-<image:title>UseFull - Link Shortner</image:title>
-</image:image>
-<image:image>
-<image:loc>https://usefull.repl.co/logo.svg</image:loc>
-<image:caption>Shorten your Useful links instantly!</image:caption>
-<image:title>UseFull - Link Shortner</image:title>
-</image:image>
-<image:image>
-<image:loc>https://usefull.repl.co/favicon.png</image:loc>
-<image:caption>Shorten your Useful links instantly!</image:caption>
-<image:title>UseFull - Link Shortner</image:title>
-</image:image>
-<image:image>
-<image:loc>https://usefull.repl.co/favicon.svg</image:loc>
-<image:caption>Shorten your Useful links instantly!</image:caption>
-<image:title>UseFull - Link Shortner</image:title>
-</image:image>
-<image:image>
-<image:loc>https://usefull.repl.co/favicon.ico</image:loc>
-<image:caption>Shorten your Useful links instantly!</image:caption>
-<image:title>UseFull - Link Shortner</image:title>
-</image:image>
-</url>
-<url>
-<loc>https://usefull.repl.co/shorten</loc>
-<changefreq>hourly</changefreq>
-<priority>0.9</priority>
-<lastmod>2021-10-14</lastmod>
-<image:image>
-<image:loc>https://usefull.repl.co/logo.png</image:loc>
-<image:caption>Shorten your Useful links instantly!</image:caption>
-<image:title>UseFull - Shorten your links</image:title>
-</image:image>
-</url>
+  <url>
+    <loc>https://usefull.repl.co/</loc>
+    <changefreq>hourly</changefreq>
+    <priority>1.0</priority>
+    <lastmod>2021-10-14</lastmod>
+    <image:image>
+      <image:loc>https://usefull.repl.co/logo.png</image:loc>
+      <image:caption>Shorten your Useful links instantly!</image:caption>
+      <image:title>UseFull - Link Shortner</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://usefull.repl.co/logo.svg</image:loc>
+      <image:caption>Shorten your Useful links instantly!</image:caption>
+      <image:title>UseFull - Link Shortner</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://usefull.repl.co/favicon.png</image:loc>
+      <image:caption>Shorten your Useful links instantly!</image:caption>
+      <image:title>UseFull - Link Shortner</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://usefull.repl.co/favicon.svg</image:loc>
+      <image:caption>Shorten your Useful links instantly!</image:caption>
+      <image:title>UseFull - Link Shortner</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://usefull.repl.co/favicon.ico</image:loc>
+      <image:caption>Shorten your Useful links instantly!</image:caption>
+      <image:title>UseFull - Link Shortner</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://usefull.repl.co/docs</loc>
+    <changefreq>hourly</changefreq>
+    <priority>1.0</priority>
+    <lastmod>2021-10-14</lastmod>
+    <image:image>
+      <image:loc>https://usefull.repl.co/logo.png</image:loc>
+      <image:caption>Shorten your Useful links instantly!</image:caption>
+      <image:title>UseFull - Docs</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://usefull.repl.co/logo.svg</image:loc>
+      <image:caption>Shorten your Useful links instantly!</image:caption>
+      <image:title>UseFull - Docs</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://usefull.repl.co/favicon.png</image:loc>
+      <image:caption>Shorten your Useful links instantly!</image:caption>
+      <image:title>UseFull - Docs</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://usefull.repl.co/favicon.svg</image:loc>
+      <image:caption>Shorten your Useful links instantly!</image:caption>
+      <image:title>UseFull - Docs</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://usefull.repl.co/favicon.ico</image:loc>
+      <image:caption>Shorten your Useful links instantly!</image:caption>
+      <image:title>UseFull - Docs</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://usefull.repl.co/shorten</loc>
+    <changefreq>hourly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2021-10-14</lastmod>
+    <image:image>
+      <image:loc>https://usefull.repl.co/logo.png</image:loc>
+      <image:caption>Shorten your Useful links instantly!</image:caption>
+      <image:title>UseFull - Shorten your links</image:title>
+    </image:image>
+  </url>
 </urlset>
