@@ -73,7 +73,7 @@ app.post('/', (req, res) => {
     });
   }
   var slug;
-  if (!req.body || req.body.hasOwnProperty('link')) {
+  if (!req.body || !req.body.hasOwnProperty('link')) {
     console.log("No Link Provided!");
     return res.status(400).json({
       error: 'Bad Request!',
@@ -95,8 +95,8 @@ app.post('/', (req, res) => {
 app.get("/:slug", (req, res) => {
   console.log("Request Payload:", req);
   var slug;
-  console.log(!req.query || req.params.hasOwnProperty('link'));
-  if (!req.params || req.params.hasOwnProperty('link')) {
+  console.log(!req.query || !req.params.hasOwnProperty('link'));
+  if (!req.params || !req.params.hasOwnProperty('link')) {
     console.log("No slug in params!");
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
@@ -123,7 +123,7 @@ app.post('/api/shorten', (req, res) => {
     });
   }
   var slug;
-  if (!req.body || req.body.hasOwnProperty('link')) {
+  if (!req.body || !req.body.hasOwnProperty('link')) {
     console.log("No Link Provided!");
     return res.status(400).json({
       error: 'Bad Request!',
@@ -145,8 +145,8 @@ app.post('/api/shorten', (req, res) => {
 app.get("/api/shorten", (req, res) => {
   console.log("Request Payload:", req);
   var slug;
-  console.log(!req.query || req.query.hasOwnProperty('link'));
-  if (!req.query || req.query.hasOwnProperty('link')) {
+  console.log(!req.query || !req.query.hasOwnProperty('link'));
+  if (!req.query || !req.query.hasOwnProperty('link')) {
     console.log("No link in query!");
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
