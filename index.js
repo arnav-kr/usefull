@@ -164,7 +164,7 @@ app.listen(3000, () => {
 });
 
 
-function shorten(slug, res, isGET) {
+function shorten(link, res, isGET) {
   try {
     fetch(process.env.ENDPOINT, {
       headers: {
@@ -177,7 +177,7 @@ function shorten(slug, res, isGET) {
         },
         "dynamicLinkInfo": {
           "domainUriPrefix": process.env.URL_PREFIX,
-          "link": slug,
+          "link": link,
         }
       }),
     })
@@ -209,7 +209,7 @@ function shorten(slug, res, isGET) {
         }
         if (json.shortLink) {
           let slug = new URL(json.shortLink).pathname.split('/').pop();
-          root.ref('usefull/' + slug).set(json.shortLink);
+          root.ref('usefull/' + slug).set(link);
           return res.status(200).json({
             link: json.shortLink,
             code: 200
