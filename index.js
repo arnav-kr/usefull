@@ -47,16 +47,16 @@ var aliases = {};
 usefull.on('child_added', snap => {
   var slug = snap.val();
   aliases[snap.key] = slug;
-  console.log("New Alias Added", { slug: snap.key, slug: snap.val() });
+  console.log("New Alias Added", { slug: snap.key, url: snap.val() });
 });
 usefull.on('child_removed', snap => {
   delete aliases[snap.key];
-  console.log("New Alias Deleted", { slug: snap.key, slug: snap.val() });
+  console.log("New Alias Deleted", { slug: snap.key, url: snap.val() });
 });
 usefull.on('child_changed', snap => {
   var slug = snap.val();
   aliases[snap.key] = slug;
-  console.log("New Alias Changed!", { slug: snap.key, slug: snap.val() });
+  console.log("New Alias Changed!", { slug: snap.key, url: snap.val() });
 });
 
 app.post('/', (req, res) => {
