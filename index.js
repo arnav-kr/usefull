@@ -48,15 +48,19 @@ usefull.on('child_added', snap => {
   var slug = snap.val();
   aliases[snap.key] = slug;
   console.log("New Alias Added", { slug: snap.key, url: snap.val() });
+  console.log(aliases);
 });
 usefull.on('child_removed', snap => {
   delete aliases[snap.key];
   console.log("New Alias Deleted", { slug: snap.key, url: snap.val() });
+  console.log(aliases);
+
 });
 usefull.on('child_changed', snap => {
   var slug = snap.val();
   aliases[snap.key] = slug;
   console.log("New Alias Changed!", { slug: snap.key, url: snap.val() });
+  console.log(aliases);
 });
 
 app.post('/', (req, res) => {
