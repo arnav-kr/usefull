@@ -60,6 +60,7 @@ usefull.on('child_changed', snap => {
 });
 
 app.post('/', (req, res) => {
+  console.log("Request Payload:", req);
   if (req.headers["content-type"] !== "application/json") {
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
@@ -92,6 +93,7 @@ app.get("/:slug", (req, res) => {
 });
 
 app.post('/api/shorten', (req, res) => {
+  console.log("Request Payload:", req);
   if (req.headers["content-type"] !== "application/json") {
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
@@ -106,6 +108,7 @@ app.post('/api/shorten', (req, res) => {
 });
 
 app.get("/api/shorten", (req, res) => {
+  console.log("Request Payload:", req);
   var slug = req.query.slug || undefined;
   if (!slug || !req.query || typeof (slug) !== "string") {
     return res.status(400).sendFile(__dirname + "/public/400.html");
