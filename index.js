@@ -211,7 +211,7 @@ function shorten(slug, res, isGET) {
           let slug = new URL(json.shortLink).pathname.split('/').pop();
           root.ref('usefull/' + slug).set(json.shortLink);
           return res.status(200).json({
-            slug: json.shortLink,
+            link: json.shortLink,
             code: 200
           });
         }
