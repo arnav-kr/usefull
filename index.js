@@ -62,16 +62,26 @@ usefull.on('child_changed', snap => {
 app.post('/', (req, res) => {
   console.log("Request Payload:", req);
   if (req.headers["content-type"] !== "application/json") {
-    return res.status(400).sendFile(__dirname + "/public/400.html");
+    return res.status(400).json({
+      error: 'Bad Request!',
+      code: 400
+    });
   }
-  var slug = req.body.slug || undefined;
-  if (!slug || !req.body || typeof (slug) !== "string") {
-    return res.status(400).sendFile(__dirname + "/public/400.html");
+  var slug;
+  if (!req.body || req.body.hasOwnProperty('link')) {
+    return res.status(400).json({
+      error: 'Bad Request!',
+      code: 400
+    });
   }
-  else {
-    slug = decodeURI(slug);
-    shorten(slug, res);
+  slug = decodeURI(req.body.link);
+  if (!(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g).test(slug)) {
+    return res.status(400).json({
+      error: 'Bad Request!',
+      code: 400
+    });
   }
+  shorten(slug, res);
 });
 
 app.get("/:slug", (req, res) => {
@@ -95,28 +105,40 @@ app.get("/:slug", (req, res) => {
 app.post('/api/shorten', (req, res) => {
   console.log("Request Payload:", req);
   if (req.headers["content-type"] !== "application/json") {
-    return res.status(400).sendFile(__dirname + "/public/400.html");
+    return res.status(400).json({
+      error: 'Bad Request!',
+      code: 400
+    });
   }
-  var slug = req.body.slug || undefined;
-  if (!slug || !req.body || typeof (slug) !== "string") {
-    return res.status(400).sendFile(__dirname + "/public/400.html");
+  var slug;
+  if (!req.body || req.body.hasOwnProperty('link')) {
+    return res.status(400).json({
+      error: 'Bad Request!',
+      code: 400
+    });
   }
-  else {
-    slug = decodeURI(slug);
-    shorten(slug, res);
+  slug = decodeURI(req.body.link);
+  if (!(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g).test(slug)) {
+    return res.status(400).json({
+      error: 'Bad Request!',
+      code: 400
+    });
   }
+  shorten(slug, res);
 });
 
 app.get("/api/shorten", (req, res) => {
   console.log("Request Payload:", req);
-  var slug = req.query.slug || undefined;
-  if (!slug || !req.query || typeof (slug) !== "string") {
+  var slug;
+  console.log(!req._body || !req.body || typeof (slug) !== "string");
+  if (!req.query || req.query.hasOwnProperty('link')) {
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
-  else {
-    slug = decodeURI(slug);
-    shorten(slug, res, true);
+  slug = decodeURI(req.query.link);
+  if (!(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g).test(slug)) {
+    return res.status(400).sendFile(__dirname + "/public/400.html");
   }
+  shorten(slug, res);
 });
 
 app.listen(3000, () => {
