@@ -23,13 +23,13 @@ function form(e) {
   })
     .then(r => r.json())
     .catch(err => {
-      console.log(err);
+      // console.log(err);
       document.getElementById("shorten-btn").disabled = false; document.getElementById("shorten-btn").classList.remove("loading");
       document.getElementById("output-section").hidden = true;
     })
     .then(res => {
       var d = res;
-      console.log(JSON.stringify(d, null, 2))
+      // console.log(JSON.stringify(d, null, 2))
       if (d.code == 200) {
         console.log("URL Shortend Successfully!");
         var cont = document.getElementById("usefull-link-container");

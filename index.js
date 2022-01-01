@@ -48,19 +48,19 @@ usefull.on('child_added', snap => {
   var slug = snap.val();
   aliases[snap.key] = slug;
   console.log("New Alias Added", { slug: snap.key, url: snap.val() });
-  console.log(aliases);
+  // console.log(aliases);
 });
 usefull.on('child_removed', snap => {
   delete aliases[snap.key];
   console.log("New Alias Deleted", { slug: snap.key, url: snap.val() });
-  console.log(aliases);
+  // console.log(aliases);
 
 });
 usefull.on('child_changed', snap => {
   var slug = snap.val();
   aliases[snap.key] = slug;
   console.log("New Alias Changed!", { slug: snap.key, url: snap.val() });
-  console.log(aliases);
+  // console.log(aliases);
 });
 
 app.post('/', (req, res) => {
@@ -95,8 +95,8 @@ app.post('/', (req, res) => {
 app.get("/:slug", (req, res) => {
   console.log("Request Payload:", req);
   var slug;
-  console.log(!req.query || !req.params.hasOwnProperty('link'));
-  if (!req.params || !req.params.hasOwnProperty('link')) {
+  console.log(!req.query || !req.params.hasOwnProperty('slug'));
+  if (!req.params || !req.params.hasOwnProperty('slug')) {
     console.log("No slug in params!");
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
