@@ -65,7 +65,7 @@ usefull.on('child_changed', snap => {
 
 app.post('/', (req, res) => {
   console.log("Request Payload:", req);
-  if (req.headers.get("content-type") !== "application/json") {
+  if (req.headers["content-type"] !== "application/json") {
     console.log("Not a JSON Request!");
     return res.status(400).json({
       error: 'Bad Request!',
@@ -115,7 +115,7 @@ app.get("/:slug", (req, res) => {
 
 app.post('/api/shorten', (req, res) => {
   console.log("Request Payload:", req);
-  if (req.headers.get("content-type") !== "application/json") {
+  if (req.headers["content-type"] !== "application/json") {
     console.log("Not a JSON Request!");
     return res.status(400).json({
       error: 'Bad Request!',
