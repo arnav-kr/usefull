@@ -156,7 +156,7 @@ app.get("/api/shorten", (req, res) => {
     console.log("Invalid URL!");
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
-  shorten(slug, res);
+  shorten(slug, res, true);
 });
 
 app.listen(3000, () => {
@@ -177,7 +177,7 @@ function shorten(slug, res, isGET) {
         },
         "dynamicLinkInfo": {
           "domainUriPrefix": process.env.URL_PREFIX,
-          "slug": slug,
+          "link": slug,
         }
       }),
     })
