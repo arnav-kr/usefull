@@ -61,7 +61,8 @@ usefull.on('child_changed', snap => {
 
 app.post('/', (req, res) => {
   console.log("Request Payload:", req);
-  if (req.headers["content-type"] !== "application/json") {
+  if (req.headers.get("content-type") !== "application/json") {
+    console.log("Not a JSON Request!");
     return res.status(400).json({
       error: 'Bad Request!',
       code: 400
@@ -69,13 +70,16 @@ app.post('/', (req, res) => {
   }
   var slug;
   if (!req.body || req.body.hasOwnProperty('link')) {
+    console.log("No Link Provided!");
     return res.status(400).json({
       error: 'Bad Request!',
       code: 400
     });
   }
   slug = decodeURI(req.body.link);
+  console.log(slug)
   if (!(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g).test(slug)) {
+    console.log("Invalid URL!");
     return res.status(400).json({
       error: 'Bad Request!',
       code: 400
@@ -85,26 +89,30 @@ app.post('/', (req, res) => {
 });
 
 app.get("/:slug", (req, res) => {
-  var slug = req.params.slug || undefined;
   console.log("Request Payload:", req);
-  if (!slug || !req.query || typeof (slug) !== "string") {
+  var slug;
+  console.log(!req.query || req.params.hasOwnProperty('link'));
+  if (!req.params || req.params.hasOwnProperty('link')) {
+    console.log("No slug in params!");
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
+  slug = req.params.slug;
+  console.log("Request Payload:", req);
+  console.log(slug, aliases[slug], aliases);
+  if (aliases[slug]) {
+    console.log("Redirecting to:", aliases[slug]);
+    res.redirect(aliases[slug]);
+  }
   else {
-    slug = decodeURI(slug);
-    console.log(slug, aliases[slug], aliases);
-    if (aliases[slug]) {
-      res.redirect(aliases[slug]);
-    }
-    else {
-      res.status(404).sendFile(__dirname + "/public/404.html");
-    }
+    console.log("No Alias Found!");
+    return res.status(404).sendFile(__dirname + "/public/404.html");
   }
 });
 
 app.post('/api/shorten', (req, res) => {
   console.log("Request Payload:", req);
-  if (req.headers["content-type"] !== "application/json") {
+  if (req.headers.get("content-type") !== "application/json") {
+    console.log("Not a JSON Request!");
     return res.status(400).json({
       error: 'Bad Request!',
       code: 400
@@ -112,13 +120,16 @@ app.post('/api/shorten', (req, res) => {
   }
   var slug;
   if (!req.body || req.body.hasOwnProperty('link')) {
+    console.log("No Link Provided!");
     return res.status(400).json({
       error: 'Bad Request!',
       code: 400
     });
   }
   slug = decodeURI(req.body.link);
+  console.log(slug)
   if (!(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g).test(slug)) {
+    console.log("Invalid URL!");
     return res.status(400).json({
       error: 'Bad Request!',
       code: 400
@@ -130,12 +141,15 @@ app.post('/api/shorten', (req, res) => {
 app.get("/api/shorten", (req, res) => {
   console.log("Request Payload:", req);
   var slug;
-  console.log(!req._body || !req.body || typeof (slug) !== "string");
+  console.log(!req.query || req.query.hasOwnProperty('link'));
   if (!req.query || req.query.hasOwnProperty('link')) {
+    console.log("No link in query!");
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
   slug = decodeURI(req.query.link);
+  console.log(slug)
   if (!(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g).test(slug)) {
+    console.log("Invalid URL!");
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
   shorten(slug, res);
