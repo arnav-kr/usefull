@@ -45,43 +45,45 @@ const usefull = root.ref('usefull');
 var aliases = {};
 
 usefull.on('child_added', snap => {
-  var link = snap.val();
-  aliases[snap.key] = link;
-  console.log("New Alias Added");
+  var slug = snap.val();
+  aliases[snap.key] = slug;
+  console.log("New Alias Added", { slug: snap.key, slug: snap.val() });
 });
 usefull.on('child_removed', snap => {
   delete aliases[snap.key];
-  console.log("New Alias Deleted");
+  console.log("New Alias Deleted", { slug: snap.key, slug: snap.val() });
 });
 usefull.on('child_changed', snap => {
-  var link = snap.val();
-  aliases[snap.key] = link;
-  console.log("New Alias Changed!");
+  var slug = snap.val();
+  aliases[snap.key] = slug;
+  console.log("New Alias Changed!", { slug: snap.key, slug: snap.val() });
 });
 
 app.post('/', (req, res) => {
   if (req.headers["content-type"] !== "application/json") {
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
-  var link = req.body.link || undefined;
-  if (!link || !req.body || typeof (link) !== "string") {
+  var slug = req.body.slug || undefined;
+  if (!slug || !req.body || typeof (slug) !== "string") {
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
   else {
-    link = decodeURI(link);
-    shorten(link, res);
+    slug = decodeURI(slug);
+    shorten(slug, res);
   }
 });
 
-app.get("/:link", (req, res) => {
-  var link = req.params.link || undefined;
-  if (!link || !req.query || typeof (link) !== "string") {
+app.get("/:slug", (req, res) => {
+  var slug = req.params.slug || undefined;
+  console.log("Request Payload:", req);
+  if (!slug || !req.query || typeof (slug) !== "string") {
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
   else {
-    link = decodeURI(link);
-    if (aliases[link]) {
-      res.redirect(aliases[link]);
+    slug = decodeURI(slug);
+    console.log(slug, aliases[slug], aliases);
+    if (aliases[slug]) {
+      res.redirect(aliases[slug]);
     }
     else {
       res.status(404).sendFile(__dirname + "/public/404.html");
@@ -93,24 +95,24 @@ app.post('/api/shorten', (req, res) => {
   if (req.headers["content-type"] !== "application/json") {
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
-  var link = req.body.link || undefined;
-  if (!link || !req.body || typeof (link) !== "string") {
+  var slug = req.body.slug || undefined;
+  if (!slug || !req.body || typeof (slug) !== "string") {
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
   else {
-    link = decodeURI(link);
-    shorten(link, res);
+    slug = decodeURI(slug);
+    shorten(slug, res);
   }
 });
 
 app.get("/api/shorten", (req, res) => {
-  var link = req.query.link || undefined;
-  if (!link || !req.query || typeof (link) !== "string") {
+  var slug = req.query.slug || undefined;
+  if (!slug || !req.query || typeof (slug) !== "string") {
     return res.status(400).sendFile(__dirname + "/public/400.html");
   }
   else {
-    link = decodeURI(link);
-    shorten(link, res, true);
+    slug = decodeURI(slug);
+    shorten(slug, res, true);
   }
 });
 
@@ -119,7 +121,7 @@ app.listen(3000, () => {
 });
 
 
-function shorten(link, res, isGET) {
+function shorten(slug, res, isGET) {
   try {
     fetch(process.env.ENDPOINT, {
       headers: {
@@ -132,7 +134,7 @@ function shorten(link, res, isGET) {
         },
         "dynamicLinkInfo": {
           "domainUriPrefix": process.env.URL_PREFIX,
-          "link": link,
+          "slug": slug,
         }
       }),
     })
@@ -164,9 +166,9 @@ function shorten(link, res, isGET) {
         }
         if (json.shortLink) {
           let slug = new URL(json.shortLink).pathname.split('/').pop();
-          root.ref('usefull/' + slug).set(link);
+          root.ref('usefull/' + slug).set(slug);
           return res.status(200).json({
-            link: json.shortLink,
+            slug: json.shortLink,
             code: 200
           });
         }
